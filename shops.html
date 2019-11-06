@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>商品列表</title>
+<meta charset="UTF-8">
+</head>
+<style>
+.goods {
+width: 290px; height: 390px; margin-left: 10px; margin-bottom: 20px; background-color: white; position: relative; float: left;
+}
+.goods > .content  {text-align: center; height: 330px; width: 100%; position: relative;}
+.goods > .content img {margin-top: 20px; transition: all 1s ease 0s; width: 230px; height: 200px;}
+.goods {
+width: 290px; height: 390px; margin-left: 10px; margin-bottom: 20px; background-color: white; position: relative; float: left;
+}
+.goods > .content  {text-align: center; height: 330px; width: 100%; position: relative;}
+.goods > .content img {margin-top: 20px; transition: all 1s ease 0s; width: 230px; height: 200px;}
+.goods > .content p {font-size: 14px; width: 230px; overflow: hidden; height: 40px; left: 0px; right: 0px; margin: auto; position: absolute; line-height: 22px; bottom: 10px;}
+.goods > .buy {border: 2px solid rgb(224, 18, 34); height: 58px; width: 286px; bottom: 0px; position: absolute;}
+.goods > .buy .price1 {font-size: 24px; color: rgb(224, 18, 34); margin-left: 5px; line-height: 35px;}
+.goods > .buy .price2 {font-size: 14px; text-decoration: line-through; margin-left: 5px;}
+.goods > .buy .o1 {font-size: 16px; margin-left: 10px; line-height: 10px;}
+.goods > .buy .o2 {display: inline-block; width: 100px; height: 10px; border: 1px solid rgb(224, 18, 34); margin-left: 20px; margin-top: 5px; position: absolute;}
+.goods > .buy .o2 > span {position: absolute; height: 10px; top: 0px; bottom: 0px; background-color: rgb(224, 18, 34);}
+.goods > .buy .addCart {width: 87px; height: 58px; position: absolute; right: 0px; top: 0px; color: white; font-size: 16px; text-align: center; line-height: 58px; cursor: pointer; background-color: rgb(224, 18, 34);}
+</style>
+<body>
+
+<div id="container">
+<div class="goods">
+    <div class="content">
+        <img src="img/03.jpg">
+        <p>德国DMK进口牛奶 欧德堡（Oldenburger）超高温处理全脂纯牛奶1L*12盒</p>
+    </div>
+    <div class="buy">
+        <div>
+            <div>
+                <span class="price1">￥139</span>
+                <span class="price2">￥156</span>
+            </div>
+            <div>
+                <span class="o1">50.00%</span>
+                <span class="o2">
+                    <span style="width: 50%;"></span>
+                </span>
+            </div>
+        </div>
+        <div id="1001" class="addCart">立即抢购</div>
+    </div>
+</div>
+
+
+<div class="goods">
+    <div class="content">
+        <img src="img/03.jpg">
+        <p>德国DMK进口牛奶 欧德堡（Oldenburger）超高温处理全脂纯牛奶1L*12盒</p>
+    </div>
+    <div class="buy">
+        <div>
+            <div>
+                <span class="price1">￥139</span>
+                <span class="price2">￥156</span>
+            </div>
+            <div>
+                <span class="o1">50.00%</span>
+                <span class="o2">
+                    <span style="width: 50%;"></span>
+                </span>
+            </div>
+        </div>
+        <div id="1001" class="addCart">立即抢购</div>
+    </div>
+</div>
+
+
+<div class="goods">
+    <div class="content">
+        <img src="img/03.jpg">
+        <p>德国DMK进口牛奶 欧德堡（Oldenburger）超高温处理全脂纯牛奶1L*12盒</p>
+    </div>
+    <div class="buy">
+        <div>
+            <div>
+                <span class="price1">￥139</span>
+                <span class="price2">￥156</span>
+            </div>
+            <div>
+                <span class="o1">50.00%</span>
+                <span class="o2">
+                    <span style="width: 50%;"></span>
+                </span>
+            </div>
+        </div>
+        <div id="1001" class="addCart">立即抢购</div>
+    </div>
+</div>
+
+
+
+
+<div class="goods">
+    <div class="content">
+        <img src="img/03.jpg">
+        <p>德国DMK进口牛奶 欧德堡（Oldenburger）超高温处理全脂纯牛奶1L*12盒</p>
+    </div>
+    <div class="buy">
+        <div>
+            <div>
+                <span class="price1">￥139</span>
+                <span class="price2">￥156</span>
+            </div>
+            <div>
+                <span class="o1">50.00%</span>
+                <span class="o2">
+                    <span style="width: 50%;"></span>
+                </span>
+            </div>
+        </div>
+        <div id="1001" class="addCart">立即抢购</div>
+    </div>
+</div>
+
+</div>
+<script src="./jq.js"></script>
+<script>
+    $(function(){
+        $('#container').html('<img  style="width="200px" height="200px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572528131945&di=591e685cb54e865631a2102123dfa9b9&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0182eb5684d9dc32f8759f0449f56c.gif"/>')
+        $.ajax({
+            type:"get",
+            url:"./php/goods1.php",
+            dataType:"json",
+            success:function(back){
+                let html=''
+                $.each(back.data,function(index,item){
+                    html+=`
+                            <div class="goods">
+                            <div class="content">
+                                <img src="${item.goods_img}">
+                                <p>${item.goods_title}</p>
+                            </div>
+                            <div class="buy">
+                                <div>
+                                    <div>
+                                        <span class="price1">￥${item.goods_price_small}</span>
+                                        <span class="price2">￥${item.goods_price}</span>
+                                    </div>
+                                    <div>
+                                        <span class="o1">50.00%</span>
+                                        <span class="o2">
+                                            <span style="width: 50%;"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div id="1001" class="addCart">立即抢购</div>
+                            </div>
+                            </div>
+
+                    `
+                })
+                $('#container').html(html)
+            },
+            error:function(err){
+
+            }
+            
+        })
+    })
+</script>
+</body>
+</html>

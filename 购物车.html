@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>商城</title>
+    <meta charset="UTF-8">
+</head>
+<style>
+table {
+	border-collapse: collapse; position: relative; float: none; width: 990px; margin: auto;
+}
+table tr {
+	border: 1px solid rgb(204, 204, 204); padding: 5px 0px;
+}
+table th {
+	background-color: rgb(243, 243, 243); color: rgb(102, 102, 102); font-size: 12px; line-height: 32px; height: 32px; width: 75px;
+}
+table td {text-align: center; font-size: 12px; background-color: rgb(243, 243, 243);}
+table td button {width: 25px; height: 25px; background-color: rgb(255, 255, 255); outline: none; cursor: pointer;position: relative; border: 1px solid rgb(204, 204, 204);}
+table td div input { width: 50px; height: 21px; border-top: 1px solid rgb(204, 204, 204); border-right: none; border-bottom: 1px solid rgb(204, 204, 204); border-left: none; border-image: initial; outline: none; position: relative; text-align: center; }
+</style>
+<body>
+	<table>
+		<thead>
+			<th><input type="checkbox">全选</th>
+			<th></th>
+			<th>商品</th>
+			<th></th>
+			<th>单价</th>
+			<th>数量</th>
+			<th>小计</th>
+			<th>操作</th>
+		</thead>
+		<tr>
+			<td><input type="checkbox" style="margin-left: -15px;"></td>
+			<td>
+				<img src="img/3.jpg">
+			</td>
+			<td>
+				德国DMK进口牛奶 欧德堡（Oldenb
+			</td>
+			<td>1L*12</td>
+			<td>139</td>
+			<td>
+				<div style="position: relative;">
+					<button class="del">-</button>
+					<input value="1" class="num" />
+					<button class="add">+</button>
+				</div>
+			</td>
+			<td>0</td>
+			<td class="del1" ><a>删除</a></td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" style="margin-left: -15px;"></td>
+			<td>
+				<img src="img/3.jpg">
+			</td>
+			<td>
+				德国DMK进口牛奶 欧德堡（Oldenb
+			</td>
+			<td>1L*12</td>
+			<td>139</td>
+			<td>
+				<div style="position: relative;">
+					<button class="del">-</button>
+					<input value="1" class="num" />
+					<button class="add">+</button>
+				</div>
+			</td>
+			<td>0</td>
+			<td class="del1" ><a>删除</a></td>
+		</tr>
+
+
+	</table>
+</body>
+<script src="./jq.js"></script>
+<script>
+	let t;
+	$(function(){
+
+		//+
+		$('table').on('click','.add',function(){
+			let goodsId=$(this).parents('tr').find('.del1').attr('id');
+			let userId=1;
+			let buyNum=parseInt($(this).prev().val())+1
+			let _this=this
+				$.ajax({
+				type:'get',
+				url:'./php/addNum.php',
+				data:{goodsId,userId,buyNum},
+				dataType:'json',
+				success:function(res){
+					if(res.meta.state==201){
+						$(_this).prev().val(buyNum)
+						alert(res.meta.msg)
+						let goodsprice=$(_this).parents('tr').find('.gp').text()
+						$(_this).parents('tr').find('.zh').html(`${goodsprice}*${buyNum}`)
+					}
+					if(res.meta.state==401) alert(res.meta.msg)
+				},
+				error:function(err){
+				}
+				})
+		})
+		//-
+		$('table').on('click','.del',function(){
+			let goodsId=$(this).parents('tr').find('.del1').attr('id');
+			let userId=1;
+			let buyNum=parseInt($(this).next().val())-1
+			let _this=this
+				$.ajax({
+				type:'get',
+				url:'./php/addNum.php',
+				data:{goodsId,userId,buyNum},
+				dataType:'json',
+				success:function(res){
+					if(res.meta.state==201){
+						$(_this).next().val(buyNum)
+						alert(res.meta.msg)
+						let goodsprice=$(_this).parents('tr').find('.gp').text()
+						$(_this).parents('tr').find('.zh').html(`${goodsprice}*${buyNum}`)
+					}
+					
+				},
+				error:function(err){
+				}
+				})
+		})
+
+		//更新数据库
+		
+		$('table').on('keyup','.num',function(){
+			clearTimeout(t)
+			let _this=this
+			t=setTimeout(()=>{
+			let goodsId=$(this).parents('tr').find('.del1').attr('id')
+			let userId=1;
+			let buyNum=$(this).val()
+			let inputVal=$(this).val()
+			inputVal=inputVal.replace(/[^0-9]/g,'')
+			$(this).val(inputVal)
+			$.ajax({
+				type:'get',
+				url:'./php/updateCart.php',
+				data:{goodsId,userId,buyNum},
+				dataType:'json',
+				success:function(res){
+					if(res.meta.state!==400)alert('更新成功')
+					if(res.meta.state==400)alert(res.meta.msg)
+					let goodsprice=$(_this).parents('tr').find('.gp').text()
+					$(_this).parents('tr').find('.zh').html(`${goodsprice}*${buyNum}`)
+				},
+				error:function(err){
+					
+				}
+			})
+			
+			},1000)
+		})
+		
+		//删除
+		$('table').on('click','.del1',function(){
+			$(this).parents('tr').remove()
+			let goodsId=$(this).attr('id');
+			let userId=1;
+			$.ajax({
+			type:'get',
+			url:'./php/delete.php',
+			data:{goodsId,userId},
+			dataType:'json',
+			success:function(res){
+				alert(res.meta.msg)
+			},
+			error:function(err){
+				alert('删除失败')
+			}
+
+		})
+			
+		})
+		
+		$('tbody').html('<img  style="width="80px" height="80px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572528131945&di=591e685cb54e865631a2102123dfa9b9&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0182eb5684d9dc32f8759f0449f56c.gif"/>')
+		$.ajax({
+			type:'get',
+			url:'./php/cart.php',
+			dataType:'json',
+			success:function(user){
+			
+					let html=''
+				$.each(user.data,function(index,item){
+					let tup=item.goods_img.replace('0','')
+					html+=`
+			<tr>
+			<td><input type="checkbox" style="margin-left: -15px;"></td>
+			<td>
+				<img src="${tup}">
+			</td>
+			<td>
+				${item.goods_title}
+			</td>
+			<td>1L*12</td>
+			<td class='gp'>${item.goods_price}</td>
+			<td>
+				<div style="position: relative;">
+					<button class="del">-</button>
+					<input value="${item.buy_num}" class="num" />
+					<button class="add">+</button>
+				</div>
+			</td>
+			<td class='zh'>${item.goods_price}*${item.buy_num}</td>
+			<td class='del1' id='${item.goods_id}'><a>删除</a></td>
+		    </tr>
+					`
+				})
+					$('tbody').html(html)
+			
+				},
+			error:function(error){
+
+			}
+		})
+	})
+</script>
+</html>
